@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D8B42727-5AF4-4FEF-9B17-94FFB71D1437</string>
+	<key>IDESourceControlProjectName</key>
+	<string>EnergyBreakapp</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>5CAFDD7C-455D-419F-B2DF-9E7FDF7C7D5D</key>
+		<string>ssh://github.com/utkarshdalal/EnergyBreakapp.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>EnergyBreakapp.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>5CAFDD7C-455D-419F-B2DF-9E7FDF7C7D5D</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/utkarshdalal/EnergyBreakapp.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>5CAFDD7C-455D-419F-B2DF-9E7FDF7C7D5D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5CAFDD7C-455D-419F-B2DF-9E7FDF7C7D5D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>EnergyBreakapp</string>
+		</dict>
+	</array>
+</dict>
+</plist>

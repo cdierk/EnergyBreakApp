@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13A2093" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="EnergyDistribution" syncable="YES">
+        <attribute name="biomassPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="city" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coalPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="gasPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="geothermalPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="hydroPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="nuclearPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="oilPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="optOutPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="otherFossilPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="solarPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="state" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="windPercentage" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="nextDistribution" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EnergyDistribution" inverseName="previousDistribution" inverseEntity="EnergyDistribution" syncable="YES"/>
+        <relationship name="previousDistribution" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="EnergyDistribution" inverseName="nextDistribution" inverseEntity="EnergyDistribution" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="EnergyDistribution" positionX="160" positionY="192" width="128" height="298"/>
+    </elements>
+</model>
