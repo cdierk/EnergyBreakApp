@@ -26,30 +26,67 @@
     
     /* Here the app first checks the stored data to see if the app has been used before.
      It stores the total value of each energy source over the lifetime of the app and can be used
-     to display the user's total consumption of each kind of fuel. The total is updated in
-     BatteryStateDidChange below, when the phone is unplugged. Since the app currently cannot detect
-     if the phone is unplugged unless the app is in the background, this currently does nothing.
-     However, if desired, the same code could be used for the same purpose elsewhere. */
+     to display the user's total consumption of each kind of fuel. */
     
+    //if standardUserDefaults hasn't been created, then the app has never been used
     if (![standardUserDefaults objectForKey:@"totalPercentage"]) {
+        
+        NSLog(@"Initialize to all unknown");
+        
         totalCoalPercentage = 0.0;
-        totalGasPercentage = 0.0;
-        totalHydroPercentage = 0.0;
-        totalNuclearPercentage = 0.0;
         totalOilPercentage = 0.0;
+        totalGasPercentage = 0.0;
+        totalNuclearPercentage = 0.0;
+        totalHydroPercentage = 0.0;
         totalRenewablePercentage = 0.0;
-        totalPercentage = 0.0;
+        totalOtherFossilPercentage = 0.0;
+        totalGeothermalPercentage = 0.0;
+        totalWindPercentage = 0.0;
+        totalSolarPercentage = 0.0;
+        totalBiomassPercentage = 0.0;
+        totalBiogasPercentage = 0.0;
+        totalPercentage = 1.0;
+        unknownPercentage = 1.0;
+        
+        //set values; first time application is used so all is unknown
+        [standardUserDefaults setDouble:totalCoalPercentage forKey:@"totalCoal"];
+        [standardUserDefaults setDouble:totalOilPercentage forKey:@"totalOil"];
+        [standardUserDefaults setDouble:totalGasPercentage forKey:@"totalGas"];
+        [standardUserDefaults setDouble:totalNuclearPercentage forKey:@"totalNuclear"];
+        [standardUserDefaults setDouble:totalHydroPercentage forKey:@"totalHydro"];
+        [standardUserDefaults setDouble:totalRenewablePercentage forKey:@"totalRenewable"];
+        [standardUserDefaults setDouble:totalOtherFossilPercentage forKey:@"totalOtherFossil"];
+        [standardUserDefaults setDouble:totalGeothermalPercentage forKey:@"totalGeothermal"];
+        [standardUserDefaults setDouble:totalGeothermalPercentage forKey:@"totalGeothermal"];
+        [standardUserDefaults setDouble:totalWindPercentage forKey:@"totalWind"];
+        [standardUserDefaults setDouble:totalSolarPercentage forKey:@"totalSolar"];
+        [standardUserDefaults setDouble:totalBiomassPercentage forKey:@"totalBiomass"];
+        [standardUserDefaults setDouble:totalBiogasPercentage forKey:@"totalBiogas"];
+        [standardUserDefaults setDouble:unknownPercentage forKey:@"unknown"];
+        [standardUserDefaults setDouble:totalPercentage forKey:@"total"];
+        [standardUserDefaults synchronize];
     }
+    
+    //otherwise, the app has been used before
     else
     {
+        
+        //get values from store
         totalCoalPercentage = [standardUserDefaults doubleForKey:@"totalCoal"];
-        totalGasPercentage = [standardUserDefaults doubleForKey:@"totalGas"];
-        totalHydroPercentage = [standardUserDefaults doubleForKey:@"totalHydro"];
-        totalNuclearPercentage = [standardUserDefaults doubleForKey:@"totalNuclear"];
         totalOilPercentage = [standardUserDefaults doubleForKey:@"totalOil"];
+        totalGasPercentage = [standardUserDefaults doubleForKey:@"totalGas"];
+        totalNuclearPercentage = [standardUserDefaults doubleForKey:@"totalNuclear"];
+        totalHydroPercentage = [standardUserDefaults doubleForKey:@"totalHydro"];
         totalRenewablePercentage = [standardUserDefaults doubleForKey:@"totalRenewable"];
-        totalPercentage = [standardUserDefaults doubleForKey:@"totalPercentage"];
-        startCharge = [standardUserDefaults doubleForKey:@"startCharge"];
+        totalOtherFossilPercentage = [standardUserDefaults doubleForKey:@"totalOtherFossil"];
+        totalGeothermalPercentage = [standardUserDefaults doubleForKey:@"totalGeothermal"];
+        totalGeothermalPercentage = [standardUserDefaults doubleForKey:@"totalGeothermal"];
+        totalWindPercentage = [standardUserDefaults doubleForKey:@"totalWind"];
+        totalSolarPercentage = [standardUserDefaults doubleForKey:@"totalSolar"];
+        totalBiomassPercentage = [standardUserDefaults doubleForKey:@"totalBiomass"];
+        totalBiogasPercentage = [standardUserDefaults doubleForKey:@"totalBiogas"];
+        unknownPercentage = [standardUserDefaults doubleForKey:@"unknown"];
+        totalPercentage = [standardUserDefaults doubleForKey:@"total"];
 
     }
     [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
@@ -58,62 +95,27 @@
                                                  name:UIDeviceBatteryStateDidChangeNotification
                                                object:nil];
     
-    //sample values for testing
     startCharge = 0;
-    currentCoalPercentage = 0.5;
-    currentOilPercentage = 0.0;
-    currentGasPercentage = 0.299;
-    currentNuclearPercentage = 0;
-    currentHydroPercentage = 0.1;
-    currentGeothermalPercentage = 0;
-    currentRenewablePercentage = 0.0;
-    currentWindPercentage = 0.01;
-    currentSolarPercentage = 0.1;
-    currentBiomassPercentage = 0;
-    currentOtherPercentage = 0.0 ;
-    currentTotalPercentage = 1;
+    currentCoalPercentage = totalCoalPercentage;
+    currentOilPercentage = totalOilPercentage;
+    currentGasPercentage = totalGasPercentage;
+    currentNuclearPercentage = totalNuclearPercentage;
+    currentHydroPercentage = totalHydroPercentage;
+    currentGeothermalPercentage = totalGeothermalPercentage;
+    currentRenewablePercentage = totalRenewablePercentage;
+    currentWindPercentage = totalWindPercentage;
+    currentSolarPercentage = totalSolarPercentage;
+    currentBiomassPercentage = totalBiomassPercentage;
+    currentOtherPercentage = totalOtherFossilPercentage;
+    currentTotalPercentage = totalPercentage;
     
-    //save current values for previous charge
-    //should check to see if there are values for previous variables. Patched for now
-    [batteryView setPreviousDistributionForCoal:currentCoalPercentage Oil:currentOilPercentage Gas:currentGasPercentage Nuclear:currentNuclearPercentage Hydro:currentHydroPercentage Renewable:currentRenewablePercentage Other:currentOtherPercentage Geothermal:currentGeothermalPercentage Wind:currentWindPercentage Solar:currentSolarPercentage Biomass:currentBiomassPercentage Biogas:currentBiogasPercentage AndTotal:currentTotalPercentage];
+    //set values for previous charge
+    [batteryView setPreviousDistributionForCoal:totalCoalPercentage Oil:totalOilPercentage Gas:totalGasPercentage Nuclear:totalNuclearPercentage Hydro:totalHydroPercentage Renewable:totalRenewablePercentage Other:totalOtherFossilPercentage Geothermal:totalGeothermalPercentage Wind:totalWindPercentage Solar:totalSolarPercentage Biomass:totalBiomassPercentage Biogas:totalBiogasPercentage Unknown: unknownPercentage AndTotal:totalPercentage];
     
     isCharging = NO;
     
-    /*Adding swipe gesture recognisers. If the user swipes right, it shows her previous energy mix.
-     If she swipes left (after swiping right) it shows her next one
-     THIS CURRENTLY DOES NOT WORK BECAUSE IT IS USING THE OLD MODEL IN WHICH ONLY THE ZIP CODE OF
-     EACH DISTRIBUTION WAS RECORDED. TO MAKE THIS WORK, EnergyBreakapp.xcdatamodel WILL NEED TO BE
-     MODIFIED SO THAT EACH ENERGY DISTRIBUTION CONTAINS AN EnergyDistribution.
-     Uncomment the following code to have left and right swiping gestures recognised */
-    
-    
-    /*
-    //The following code taken from http://www.altinkonline.nl/tutorials/xcode/gestures/swipe-gesture-for-ios-apps/
-    UISwipeGestureRecognizer *oneFingerSwipeLeft = [[UISwipeGestureRecognizer alloc]
-                                                     initWithTarget:self
-                                                     action:@selector(oneFingerSwipeLeft:)];
-    [oneFingerSwipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [[self view] addGestureRecognizer:oneFingerSwipeLeft];
-    
-    UISwipeGestureRecognizer *oneFingerSwipeRight = [[UISwipeGestureRecognizer alloc]
-                                                      initWithTarget:self
-                                                      action:@selector(oneFingerSwipeRight:)];
-    [oneFingerSwipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
-    [[self view] addGestureRecognizer:oneFingerSwipeRight];
-     */
-    
-    //Uncomment the following lines and delete the one before this comment when you want the phone to check if it is charging before updating the location.
-    /*if ([[UIDevice currentDevice] batteryState] == UIDeviceBatteryStateCharging)
-    {
-        isCharging = YES;
-    }*/
-    
     locationManager.delegate = self;
-    
-    //CHANGE THE ACCURACY!
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
-    //NSLog(@"View finished loading");
 }
 
 - (void)didReceiveMemoryWarning
@@ -224,8 +226,6 @@
         UIAlertView *chargingAlert = [[UIAlertView alloc] initWithTitle:@"Charging" message:@"Your device is now charging" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [chargingAlert show];
         
-        /*NSLog(@"startCharge: %f, currentCharge: %f, currentCoal: %f, currentOil: %f, currentGas: %f, currentNuclear, %f, currentHydro: %f, currentRenewable: %f, currentOther: %f, currentGeothermal: %f, currentWind: %f, currentSolar: %f, currentBiomass: %f, currentBiogas: %f, currentTotal: %f", startCharge, [[UIDevice currentDevice] batteryLevel], currentCoalPercentage, currentOilPercentage, currentGasPercentage, currentNuclearPercentage, currentHydroPercentage, currentRenewablePercentage, currentOtherPercentage, currentGeothermalPercentage, currentWindPercentage, currentSolarPercentage, currentBiomassPercentage, currentBiogasPercentage, currentTotalPercentage);*/
-        
         //get new values for current charge
         [self clearLocation];
         
@@ -233,42 +233,28 @@
         _startChargePercentage = [[UIDevice currentDevice] batteryLevel];
         startCharge = [[UIDevice currentDevice] batteryLevel];
         
-        //commented out for now
-        //[locationManager startUpdatingLocation];
+        [locationManager startUpdatingLocation];
         
-        //sample values
-        currentCoalPercentage = 0.1;
-        currentOilPercentage = 0.2;
-        currentGasPercentage = 0.0;
-        currentNuclearPercentage = 0.5;
-        currentHydroPercentage = 0;
-        currentGeothermalPercentage = 0;
-        currentWindPercentage = 0.2;
-        currentSolarPercentage = 0.0;
-        currentBiomassPercentage = 0;
-        currentOtherPercentage = 0;
-        currentTotalPercentage = 1;
-        
-        /*
-            NSLog(@"Device is charging");
-            locationManager.delegate = self;
-            locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
-            [locationManager startUpdatingLocation];
-        */
-        
-        
-        /*NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
+        NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
         [standardUserDefaults setDouble:currentCoalPercentage forKey:@"currentCoal"];
-        [standardUserDefaults setDouble:currentGasPercentage forKey:@"currentGas"];
-        [standardUserDefaults setDouble:currentHydroPercentage forKey:@"currentHyrdo"];
-        [standardUserDefaults setDouble:currentNuclearPercentage forKey:@"currentNuclear"];
         [standardUserDefaults setDouble:currentOilPercentage forKey:@"currentOil"];
+        [standardUserDefaults setDouble:currentGasPercentage forKey:@"currentGas"];
+        [standardUserDefaults setDouble:currentNuclearPercentage forKey:@"currentNuclear"];
+        [standardUserDefaults setDouble:currentHydroPercentage forKey:@"currentHydro"];
         [standardUserDefaults setDouble:currentRenewablePercentage forKey:@"currentRenewable"];
+        [standardUserDefaults setDouble:currentOtherPercentage forKey:@"currentOtherFossil"];
+        [standardUserDefaults setDouble:currentGeothermalPercentage forKey:@"currentGeothermal"];
+        [standardUserDefaults setDouble:currentGeothermalPercentage forKey:@"currentGeothermal"];
+        [standardUserDefaults setDouble:currentWindPercentage forKey:@"currentWind"];
+        [standardUserDefaults setDouble:currentSolarPercentage forKey:@"currentSolar"];
+        [standardUserDefaults setDouble:currentBiomassPercentage forKey:@"currentBiomass"];
+        [standardUserDefaults setDouble:currentBiogasPercentage forKey:@"currentBiogas"];
+        [standardUserDefaults setDouble:unknownPercentage forKey:@"unknown"];
         [standardUserDefaults setDouble:currentTotalPercentage forKey:@"currentTotal"];
         [standardUserDefaults setDouble:_startChargePercentage forKey:@"startCharge"];
-        [standardUserDefaults synchronize];*/
+        [standardUserDefaults synchronize];
         
-        [batteryView setDistributionForCoal:currentCoalPercentage Oil:currentOilPercentage Gas:currentGasPercentage Nuclear:currentNuclearPercentage Hydro:currentHydroPercentage Renewable:currentRenewablePercentage Other:currentOtherPercentage Geothermal:currentGeothermalPercentage Wind:currentWindPercentage Solar:currentSolarPercentage Biomass:currentBiomassPercentage Biogas:currentBiogasPercentage AndTotal:currentTotalPercentage AndStartCharge:startCharge];
+        [self updateDisplay:NULL];
     }
     else if ([[UIDevice currentDevice] batteryState] == UIDeviceBatteryStateUnplugged) {
         
@@ -282,43 +268,16 @@
         
         _secondsSpentCharging = [_endDate timeIntervalSinceDate:_startDate];
         
-        //updated so this is set in concatDistributions
-        /*NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
-        currentCoalPercentage = [standardUserDefaults doubleForKey:@"currentCoal"];
-        currentGasPercentage = [standardUserDefaults doubleForKey:@"currentGas"];
-        currentHydroPercentage = [standardUserDefaults doubleForKey:@"currentHydro"];
-        currentNuclearPercentage = [standardUserDefaults doubleForKey:@"currentNuclear"];
-        currentOilPercentage = [standardUserDefaults doubleForKey:@"currentOil"];
-        currentRenewablePercentage = [standardUserDefaults doubleForKey:@"currentRenewable"];
-        currentTotalPercentage = [standardUserDefaults doubleForKey:@"currentTotal"];
-        _percentCharged = _endChargePercentage - [standardUserDefaults doubleForKey:@"startCharge"];
-        
-        [standardUserDefaults setDouble:totalCoalPercentage+currentCoalPercentage*_percentCharged forKey:@"totalCoal"];
-        [standardUserDefaults setDouble:totalGasPercentage+currentGasPercentage*_percentCharged forKey:@"totalGas"];
-        [standardUserDefaults setDouble:totalHydroPercentage+currentHydroPercentage*_percentCharged forKey:@"totalHydro"];
-        [standardUserDefaults setDouble:totalNuclearPercentage+currentNuclearPercentage*_percentCharged forKey:@"totalNuclear"];
-        [standardUserDefaults setDouble:totalOilPercentage+currentOilPercentage*_percentCharged forKey:@"totalOil"];
-        [standardUserDefaults setDouble:totalRenewablePercentage+currentRenewablePercentage*_percentCharged forKey:@"totalRenewable"];
-        [standardUserDefaults setDouble:totalPercentage+currentTotalPercentage*_percentCharged forKey:@"totalPercentage"];
-        [standardUserDefaults synchronize];*/
-        
         UIAlertView *unpluggedAlert = [[UIAlertView alloc] initWithTitle:@"Unplugged" message:@"Your device is no longer charging" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [unpluggedAlert show];
     }
 }
 
 - (IBAction)updateLocation:(id)sender{
-    //commented out until API is working again
-    /*//NSLog(@"Update Location button pressed");
     [self clearLocation];
-    //NSLog(@"Device is charging");
-    
     
     //CHANGE THE UPDATE FREQUENCY!
-    [locationManager startUpdatingLocation];*/
-    
-    [self hardCodedSetPercentages];
-    //[self batteryStateDidChange:(NULL)];
+    [locationManager startUpdatingLocation];
     
 }
 
@@ -370,7 +329,6 @@
     appDelegate = (EnergyBreakappAppDelegate*) [[UIApplication sharedApplication] delegate];
     context = appDelegate.managedObjectContext;
     
-    
     NSError *error;
     fetchRequest = [[NSFetchRequest alloc] init];
     entity = [NSEntityDescription
@@ -408,24 +366,6 @@
     }
 }
 
--(void) hardCodedSetPercentages {
-    currentCoalPercentage = 0.5;
-    currentOilPercentage = 0.0;
-    currentGasPercentage = 0.299;
-    currentNuclearPercentage = 0.0;
-    currentHydroPercentage = 0.1;
-    currentRenewablePercentage = 0.0;
-    currentOtherPercentage = 0.0;
-    //NSLog(@"Other percentage in view controller is %f", currentOtherPercentage);
-    currentGeothermalPercentage = 0.0;
-    currentSolarPercentage = 0.1;
-    currentWindPercentage = 0.01;
-    currentBiomassPercentage = 0.0;
-    currentBiogasPercentage = 0.0;
-    currentTotalPercentage = 1.0;
-    [batteryView setDistributionForCoal:currentCoalPercentage Oil:currentOilPercentage Gas:currentGasPercentage Nuclear:currentNuclearPercentage Hydro:currentHydroPercentage Renewable:currentRenewablePercentage Other:currentOtherPercentage Geothermal:currentGeothermalPercentage Wind:currentWindPercentage Solar:currentSolarPercentage Biomass:currentBiomassPercentage Biogas:currentBiogasPercentage AndTotal:currentTotalPercentage AndStartCharge:startCharge];
-}
-
 -(void) setPercentages
 {
     currentCoalPercentage = [distribution coalPercentage];
@@ -442,19 +382,19 @@
     currentBiomassPercentage = [distribution biomassPercentage];
     currentBiogasPercentage = [distribution biogasPercentage];
     currentTotalPercentage = [distribution totalPercentages];
-    [batteryView setDistributionForCoal:currentCoalPercentage Oil:currentOilPercentage Gas:currentGasPercentage Nuclear:currentNuclearPercentage Hydro:currentHydroPercentage Renewable:currentRenewablePercentage Other:currentOtherPercentage Geothermal:currentGeothermalPercentage Wind:currentWindPercentage Solar:currentSolarPercentage Biomass:currentBiomassPercentage Biogas:currentBiogasPercentage AndTotal:currentTotalPercentage AndStartCharge:startCharge];
+    [batteryView setDistributionForCoal:currentCoalPercentage Oil:currentOilPercentage Gas:currentGasPercentage Nuclear:currentNuclearPercentage Hydro:currentHydroPercentage Renewable:currentRenewablePercentage Other:currentOtherPercentage Geothermal:currentGeothermalPercentage Wind:currentWindPercentage Solar:currentSolarPercentage Biomass:currentBiomassPercentage Biogas:currentBiogasPercentage Unknown: unknownPercentage AndTotal:currentTotalPercentage AndStartCharge:startCharge];
 }
 
 //data already gathered from API, simply update display from it
 - (IBAction)updateDisplay:(id)sender {
     
-    [batteryView setDistributionForCoal:currentCoalPercentage Oil:currentOilPercentage Gas:currentGasPercentage Nuclear:currentNuclearPercentage Hydro:currentHydroPercentage Renewable:currentRenewablePercentage Other:currentOtherPercentage Geothermal:currentGeothermalPercentage Wind:currentWindPercentage Solar:currentSolarPercentage Biomass:currentBiomassPercentage Biogas:currentBiogasPercentage AndTotal:currentTotalPercentage AndStartCharge:startCharge];
+    [batteryView setDistributionForCoal:currentCoalPercentage Oil:currentOilPercentage Gas:currentGasPercentage Nuclear:currentNuclearPercentage Hydro:currentHydroPercentage Renewable:currentRenewablePercentage Other:currentOtherPercentage Geothermal:currentGeothermalPercentage Wind:currentWindPercentage Solar:currentSolarPercentage Biomass:currentBiomassPercentage Biogas:currentBiogasPercentage Unknown: unknownPercentage AndTotal:currentTotalPercentage AndStartCharge:startCharge];
 }
 
 //if app is running in background
+//not quite implemented
 -(void) math
 {
-    
     //device is charging
     if ([[UIDevice currentDevice] batteryState] == UIDeviceBatteryStateCharging) {
         NSLog(@"Charging...");
@@ -464,21 +404,41 @@
         }
         //if was not charging before
         else {
+            
+            NSLog(@"Now charging");
+            
+            UIAlertView *chargingAlert = [[UIAlertView alloc] initWithTitle:@"Charging" message:@"Your device is now charging" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [chargingAlert show];
+            
+            //get new values for current charge
             [self clearLocation];
-            [locationManager startUpdatingLocation];
+            
             _startDate = [NSDate date];
             _startChargePercentage = [[UIDevice currentDevice] batteryLevel];
+            startCharge = [[UIDevice currentDevice] batteryLevel];
+            
+            [locationManager startUpdatingLocation];
             
             NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
             [standardUserDefaults setDouble:currentCoalPercentage forKey:@"currentCoal"];
-            [standardUserDefaults setDouble:currentGasPercentage forKey:@"currentGas"];
-            [standardUserDefaults setDouble:currentHydroPercentage forKey:@"currentHyrdo"];
-            [standardUserDefaults setDouble:currentNuclearPercentage forKey:@"currentNuclear"];
             [standardUserDefaults setDouble:currentOilPercentage forKey:@"currentOil"];
+            [standardUserDefaults setDouble:currentGasPercentage forKey:@"currentGas"];
+            [standardUserDefaults setDouble:currentNuclearPercentage forKey:@"currentNuclear"];
+            [standardUserDefaults setDouble:currentHydroPercentage forKey:@"currentHydro"];
             [standardUserDefaults setDouble:currentRenewablePercentage forKey:@"currentRenewable"];
+            [standardUserDefaults setDouble:currentOtherPercentage forKey:@"currentOtherFossil"];
+            [standardUserDefaults setDouble:currentGeothermalPercentage forKey:@"currentGeothermal"];
+            [standardUserDefaults setDouble:currentGeothermalPercentage forKey:@"currentGeothermal"];
+            [standardUserDefaults setDouble:currentWindPercentage forKey:@"currentWind"];
+            [standardUserDefaults setDouble:currentSolarPercentage forKey:@"currentSolar"];
+            [standardUserDefaults setDouble:currentBiomassPercentage forKey:@"currentBiomass"];
+            [standardUserDefaults setDouble:currentBiogasPercentage forKey:@"currentBiogas"];
+            [standardUserDefaults setDouble:unknownPercentage forKey:@"unknown"];
             [standardUserDefaults setDouble:currentTotalPercentage forKey:@"currentTotal"];
             [standardUserDefaults setDouble:_startChargePercentage forKey:@"startCharge"];
             [standardUserDefaults synchronize];
+            
+            [self updateDisplay:NULL];
         }
         isCharging = YES;
     }
@@ -486,6 +446,13 @@
         NSLog(@"Completely charged");
         //if was charging before
         if(isCharging){
+            _endDate = [NSDate date];
+            _endChargePercentage = [[UIDevice currentDevice] batteryLevel];
+            
+            [batteryView concatDistributions];
+            startCharge = [[UIDevice currentDevice] batteryLevel];
+            
+            _secondsSpentCharging = [_endDate timeIntervalSinceDate:_startDate];
             
         }
         //if was not charging before
@@ -498,6 +465,17 @@
         NSLog(@"Not plugged in");
         //if was charging before
         if (isCharging){
+            //phone is unplugged
+            _endDate = [NSDate date];
+            _endChargePercentage = [[UIDevice currentDevice] batteryLevel];
+            
+            [batteryView concatDistributions];
+            startCharge = [[UIDevice currentDevice] batteryLevel];
+            
+            _secondsSpentCharging = [_endDate timeIntervalSinceDate:_startDate];
+            
+            UIAlertView *unpluggedAlert = [[UIAlertView alloc] initWithTitle:@"Unplugged" message:@"Your device is no longer charging" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [unpluggedAlert show];
             
         }
         //if was not charging before

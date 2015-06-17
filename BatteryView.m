@@ -20,7 +20,7 @@
     return self;
 }
 
--(void) setDistributionForCoal: (double) coalPercentage Oil: (double) oilPercentage Gas: (double) gasPercentage Nuclear: (double) nuclearPercentage Hydro: (double) hydroPercentage Renewable: (double) renewablePercentage Other: (double) otherPercentage Geothermal: (double) geothermalPercentage Wind: (double) windPercentage Solar: (double) solarPercentage Biomass: (double) biomassPercentage Biogas: (double) biogasPercentage AndTotal: (double) totalPercentage AndStartCharge:(double)startChargeValue
+-(void) setDistributionForCoal: (double) coalPercentage Oil: (double) oilPercentage Gas: (double) gasPercentage Nuclear: (double) nuclearPercentage Hydro: (double) hydroPercentage Renewable: (double) renewablePercentage Other: (double) otherPercentage Geothermal: (double) geothermalPercentage Wind: (double) windPercentage Solar: (double) solarPercentage Biomass: (double) biomassPercentage Biogas: (double) biogasPercentage  Unknown: (double) newUnknownPercentage AndTotal: (double) totalPercentage AndStartCharge:(double)startChargeValue
 {
     NSLog(@"Other is %f out of a total of %f", otherPercentage, totalPercentage);
     currentCoalPercentage = coalPercentage/totalPercentage;
@@ -37,12 +37,13 @@
     currentBiomassPercentage = biomassPercentage/totalPercentage;
     currentBiogasPercentage = biogasPercentage/totalPercentage;
     currentTotalPercentage = totalPercentage;
+    unknownPercentage = newUnknownPercentage;
     startCharge = startChargeValue;
     hasDistribution = YES;
     [self setNeedsDisplay];
 }
 
--(void) setPreviousDistributionForCoal: (double)coalPercentage Oil:(double)oilPercentage Gas:(double)gasPercentage Nuclear:(double)nuclearPercentage Hydro:(double)hydroPercentage Renewable:(double)renewablePercentage Other:(double)otherPercentage Geothermal:(double)geothermalPercentage Wind:(double)windPercentage Solar:(double)solarPercentage Biomass:(double)biomassPercentage Biogas:(double)biogasPercentage AndTotal:(double)totalPercentage
+-(void) setPreviousDistributionForCoal: (double)coalPercentage Oil:(double)oilPercentage Gas:(double)gasPercentage Nuclear:(double)nuclearPercentage Hydro:(double)hydroPercentage Renewable:(double)renewablePercentage Other:(double)otherPercentage Geothermal:(double)geothermalPercentage Wind:(double)windPercentage Solar:(double)solarPercentage Biomass:(double)biomassPercentage Biogas:(double)biogasPercentage Unknown: (double) newUnknownPercentage AndTotal:(double)totalPercentage
 {
     NSLog(@"Other is %f out of a total of %f", otherPercentage, totalPercentage);
     previousCoalPercentage = coalPercentage/totalPercentage;
@@ -59,6 +60,7 @@
     previousBiomassPercentage = biomassPercentage/totalPercentage;
     previousBiogasPercentage = biogasPercentage/totalPercentage;
     previousTotalPercentage = totalPercentage;
+    unknownPercentage = newUnknownPercentage;
     [self setNeedsDisplay];
 }
 
@@ -139,6 +141,16 @@ void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor
     UIColor * lGreyColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
     drawLinearGradient(context, startChargeRectangle, lGreyColor.CGColor, dGreyColor.CGColor);
     
+    //can use same color because unknown is subset of start charge
+    if (startCharge == 0){
+        CGRect unknownChargeRectangle = CGRectMake(currentPosition, top, unknownPercentage*remainingWidth, height);
+        currentPosition += unknownPercentage*remainingWidth;
+        CGContextAddRect(context, unknownChargeRectangle);
+        UIColor * dGreyColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.0];
+        UIColor * lGreyColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
+        drawLinearGradient(context, unknownChargeRectangle, lGreyColor.CGColor, dGreyColor.CGColor);
+    }
+    
     CGRect coalRectangle = CGRectMake(currentPosition, top, currentCoalPercentage*remainingWidth, height);
     currentPosition += currentCoalPercentage*remainingWidth;
     CGContextAddRect(context, coalRectangle);
@@ -213,6 +225,8 @@ void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor
     drawLinearGradient(context, otherFossilRectangle, lightPurpleColor.CGColor, darkPurpleColor.CGColor);
     
     NSLog(@"Current drawing position is %f", currentPosition);
+    
+    NSLog(@"startCharge: %f, currentCharge: %f, currentCoal: %f, currentOil: %f, currentGas: %f, currentNuclear, %f, currentHydro: %f, currentRenewable: %f, currentOther: %f, currentGeothermal: %f, currentWind: %f, currentSolar: %f, currentBiomass: %f, currentBiogas: %f, unknown: %f", startCharge, currentCharge, currentCoalPercentage, currentOilPercentage, currentGasPercentage, currentNuclearPercentage, currentHydroPercentage, currentRenewablePercentage, currentOtherPercentage, currentGeothermalPercentage, currentWindPercentage, currentSolarPercentage, currentBiomassPercentage, currentBiogasPercentage, unknownPercentage);
 }
 
 //Adds previous charge and current charge when unplugged
@@ -220,11 +234,18 @@ void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor
 {
     float currentCharge = [[UIDevice currentDevice] batteryLevel];
     
-    UIAlertView *statsAlert = [[UIAlertView alloc] initWithTitle:@"Stats" message:[NSString stringWithFormat:@"startCharge: %f, currentCharge: %f, currentCoal: %f, currentOil: %f, currentGas: %f, currentNuclear, %f, currentHydro: %f, currentRenewable: %f, currentOther: %f, currentGeothermal: %f, currentWind: %f, currentSolar: %f, currentBiomass: %f, currentBiogas: %f", startCharge, currentCharge, currentCoalPercentage, currentOilPercentage, currentGasPercentage, currentNuclearPercentage, currentHydroPercentage, currentRenewablePercentage, currentOtherPercentage, currentGeothermalPercentage, currentWindPercentage, currentSolarPercentage, currentBiomassPercentage, currentBiogasPercentage] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    //alerts for debugging
+    /*UIAlertView *statsAlert = [[UIAlertView alloc] initWithTitle:@"Stats" message:[NSString stringWithFormat:@"startCharge: %f, currentCharge: %f, currentCoal: %f, currentOil: %f, currentGas: %f, currentNuclear, %f, currentHydro: %f, currentRenewable: %f, currentOther: %f, currentGeothermal: %f, currentWind: %f, currentSolar: %f, currentBiomass: %f, currentBiogas: %f", startCharge, currentCharge, currentCoalPercentage, currentOilPercentage, currentGasPercentage, currentNuclearPercentage, currentHydroPercentage, currentRenewablePercentage, currentOtherPercentage, currentGeothermalPercentage, currentWindPercentage, currentSolarPercentage, currentBiomassPercentage, currentBiogasPercentage] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [statsAlert show];
     
     UIAlertView *prevStatsAlert = [[UIAlertView alloc] initWithTitle:@"Stats" message:[NSString stringWithFormat:@"startCharge: %f, currentCharge: %f, prevCoal: %f, prevOil: %f, prevGas: %f, prevNuclear, %f, prevHydro: %f, prevRenewable: %f, prevOther: %f, prevGeothermal: %f, prevWind: %f, prevSolar: %f, prevBiomass: %f, prevBiogas: %f", startCharge, currentCharge, previousCoalPercentage, previousOilPercentage, previousGasPercentage, previousNuclearPercentage, previousHydroPercentage, previousRenewablePercentage, previousOtherPercentage, previousGeothermalPercentage, previousWindPercentage, previousSolarPercentage, previousBiomassPercentage, previousBiogasPercentage] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [prevStatsAlert show];
+    [prevStatsAlert show];*/
+    
+    UIAlertView *unknownAlert = [[UIAlertView alloc] initWithTitle:@"unknown charge" message:[NSString stringWithFormat:@"unknown percentage: %f", unknownPercentage] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [unknownAlert show];
+    
+    UIAlertView *startAlert = [[UIAlertView alloc] initWithTitle:@"start charge" message:[NSString stringWithFormat:@"start charge: %f", startCharge] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [startAlert show];
     
     currentCoalPercentage = (previousCoalPercentage * startCharge + currentCoalPercentage * (currentCharge - startCharge))/currentCharge;
     currentOilPercentage = (previousOilPercentage * startCharge + currentOilPercentage * (currentCharge - startCharge))/currentCharge;
@@ -238,6 +259,29 @@ void drawLinearGradient(CGContextRef context, CGRect rect, CGColorRef startColor
     currentSolarPercentage = (previousSolarPercentage * startCharge + currentSolarPercentage * (currentCharge - startCharge))/currentCharge;
     currentBiomassPercentage = (previousBiomassPercentage * startCharge + currentBiomassPercentage * (currentCharge - startCharge))/currentCharge;
     currentBiogasPercentage = (previousBiogasPercentage * startCharge + currentBiogasPercentage * (currentCharge - startCharge))/currentCharge;
+    unknownPercentage = (unknownPercentage * startCharge) / currentCharge; //never going to increase, ideally should decrease to 0
+    
+    NSUserDefaults * standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    [standardUserDefaults setDouble:currentCoalPercentage forKey:@"totalCoal"];
+    [standardUserDefaults setDouble:currentOilPercentage forKey:@"totalOil"];
+    [standardUserDefaults setDouble:currentGasPercentage forKey:@"totalGas"];
+    [standardUserDefaults setDouble:currentNuclearPercentage forKey:@"totalNuclear"];
+    [standardUserDefaults setDouble:currentHydroPercentage forKey:@"totalHydro"];
+    [standardUserDefaults setDouble:currentRenewablePercentage forKey:@"totalRenewable"];
+    [standardUserDefaults setDouble:currentOtherPercentage forKey:@"totalOtherFossil"];
+    [standardUserDefaults setDouble:currentGeothermalPercentage forKey:@"totalGeothermal"];
+    [standardUserDefaults setDouble:currentGeothermalPercentage forKey:@"totalGeothermal"];
+    [standardUserDefaults setDouble:currentWindPercentage forKey:@"totalWind"];
+    [standardUserDefaults setDouble:currentSolarPercentage forKey:@"totalSolar"];
+    [standardUserDefaults setDouble:currentBiomassPercentage forKey:@"totalBiomass"];
+    [standardUserDefaults setDouble:currentBiogasPercentage forKey:@"totalBiogas"];
+    [standardUserDefaults setDouble:unknownPercentage forKey:@"unknown"];
+    [standardUserDefaults setDouble:currentTotalPercentage forKey:@"total"];
+    [standardUserDefaults synchronize];
+    
+    UIAlertView *newUnknownPercentage = [[UIAlertView alloc] initWithTitle:@"new unknown charge" message:[NSString stringWithFormat:@"new unknown percentage: %f", unknownPercentage] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [newUnknownPercentage show];
+    
     NSLog(@"startCharge: %f, currentCharge: %f, currentCoal: %f, currentOil: %f, currentGas: %f, currentNuclear, %f, currentHydro: %f, currentRenewable: %f, currentOther: %f, currentGeothermal: %f, currentWind: %f, currentSolar: %f, currentBiomass: %f, currentBiogas: %f", startCharge, currentCharge, currentCoalPercentage, currentOilPercentage, currentGasPercentage, currentNuclearPercentage, currentHydroPercentage, currentRenewablePercentage, currentOtherPercentage, currentGeothermalPercentage, currentWindPercentage, currentSolarPercentage, currentBiomassPercentage, currentBiogasPercentage);
     
 

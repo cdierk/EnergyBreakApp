@@ -10,31 +10,31 @@
 	<string>EnergyBreakapp</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>5CAFDD7C-455D-419F-B2DF-9E7FDF7C7D5D</key>
-		<string>ssh://github.com/utkarshdalal/EnergyBreakapp.git</string>
+		<key>6E20A278687C8D60DD3CEA2962EA8227D4CCD455</key>
+		<string>https://github.com/cdierk/EnergyBreakApp.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>EnergyBreakapp.xcodeproj/project.xcworkspace</string>
+	<string>EnergyBreakapp.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>5CAFDD7C-455D-419F-B2DF-9E7FDF7C7D5D</key>
+		<key>6E20A278687C8D60DD3CEA2962EA8227D4CCD455</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/utkarshdalal/EnergyBreakapp.git</string>
+	<string>https://github.com/cdierk/EnergyBreakApp.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>5CAFDD7C-455D-419F-B2DF-9E7FDF7C7D5D</string>
+	<string>6E20A278687C8D60DD3CEA2962EA8227D4CCD455</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>5CAFDD7C-455D-419F-B2DF-9E7FDF7C7D5D</string>
+			<string>6E20A278687C8D60DD3CEA2962EA8227D4CCD455</string>
 			<key>IDESourceControlWCCName</key>
-			<string>EnergyBreakapp</string>
+			<string>EnergyBreakApp</string>
 		</dict>
 	</array>
 </dict>
